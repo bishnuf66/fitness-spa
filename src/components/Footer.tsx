@@ -84,10 +84,10 @@ export default function Footer() {
           <h3 className="text-lg font-bold mb-4">Contact US</h3>
           <div className="space-y-2">
             <p className="flex items-center">
-              <Phone className="mr-2 h-4 w-4" /> +1(383)76-6284
+              <Phone className="mr-2 h-4 w-4 text-red-500" /> +1(383)76-6284
             </p>
             <p className="flex items-center">
-              <Mail className="mr-2 h-4 w-4" /> contact@gmail.com
+              <Mail className="mr-2 h-4 w-4 text-red-500" /> contact@gmail.com
             </p>
             <p className="flex items-center">
               <MapPin className="mr-2 h-4 w-4 text-red-500" /> Kathmandu, Nepal
