@@ -4,7 +4,7 @@ function Testimonials() {
   return (
     <div className=" flex flex-row justify-evenly  w-full" id="testimonials">
       <div className="w-2/5">
-        <h1>What Our Happy Clients Say About Us</h1>
+        <h2>What Our Happy Clients Say About Us</h2>
         <p>
           I`&apos;`ve been a member of fitness within for about 6 months now and
           i absoulutely love it! .The TRainers are so motivated and they really
@@ -19,7 +19,7 @@ function Testimonials() {
         <div className="flex flex-row">
           <span>icon</span>
           <div className="flex flex-col">
-            <h1>Farhan Rio</h1>
+            <h2>Farhan Rio</h2>
             <p>Happy Customer</p>
           </div>
         </div>

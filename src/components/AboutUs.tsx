@@ -3,17 +3,17 @@ import React from "react";
 function AboutUs() {
   return (
     <div>
-      <div>970K+ more trusted Companie partner</div>
+      <h3>970K+ more trusted Companie partner</h3>
       <div>
-        <h1>icon Videoask</h1>
-        <h1> icon HubSpot</h1>
-        <h1> icon Mapbox</h1>
+        <h2>icon Videoask</h2>
+        <h2> icon HubSpot</h2>
+        <h2> icon Mapbox</h2>
       </div>
 
       <div className="flex flex-row">
         <div>image here</div>
         <div>
-          <h1>Get Ready to Reach Your Fitness Goals</h1>
+          <h2>Get Ready to Reach Your Fitness Goals</h2>
           <p>
             we are a gym that is commited to helping people reach their fitness
             goals. we offer a variety of theirs program and services to fit your

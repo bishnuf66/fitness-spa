@@ -14,7 +14,7 @@ export default function Footer() {
     <footer className="bg-primary-bg text-white py-8 px-4 md:px-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
         <div>
-          <h2 className="text-lg font-bold mb-4">Company</h2>
+          <h3 className="text-lg font-bold mb-4">Company</h3>
           <div className="space-y-2">
             <p className="flex items-center">About Us</p>
             <p className="flex items-center">Why Us </p>
@@ -24,7 +24,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h2 className="text-lg font-bold mb-4">Categories</h2>
+          <h3 className="text-lg font-bold mb-4">Categories</h3>
           <ul className="space-y-2">
             <li>
               <a href="#" className="hover:underline">
@@ -55,7 +55,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h2 className="text-lg font-bold mb-4">Help</h2>
+          <h3 className="text-lg font-bold mb-4">Help</h3>
           <ul className="space-y-2">
             <li>
               <a href="#" className="hover:underline">
@@ -80,7 +80,7 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h2 className="text-lg font-bold mb-4">Contact US</h2>
+          <h3 className="text-lg font-bold mb-4">Contact US</h3>
           <div className="space-y-2">
             <p className="flex items-center">
               <Phone className="mr-2 h-4 w-4" /> +1(383)76-6284
@@ -95,7 +95,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h2 className="text-lg font-bold mb-4">Subscribe Our Newsletter</h2>
+          <h3 className="text-lg font-bold mb-4">Subscribe Our Newsletter</h3>
           <form className="mb-4">
             <div className="flex">
               <input

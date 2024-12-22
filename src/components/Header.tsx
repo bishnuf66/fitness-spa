@@ -6,8 +6,11 @@ function Header() {
     <header className="w-full flex flex-row justify-between items-center p-4">
       {/* Logo Section */}
       <div className="flex flex-row items-center space-x-2">
-        <Dumbbell className="h-8 w-8 text-red-500" aria-label="Fitness Logo" />
-        <h1 className="text-xl font-semibold">FITNEESXI</h1>
+        <Dumbbell
+          className="h-10 w-10 text-red-500"
+          aria-label="Fitness Logo"
+        />
+        <h2 className="text-xl font-semibold pl-2">FITNESXIA</h2>
       </div>
 
       {/* Navigation Section */}
@@ -34,7 +37,7 @@ function Header() {
             </a>
           </li>
           <li>
-            <button className="primary-btn">Sign up</button>
+            <button className="primary-btn px-4 py-2">Sign up</button>
           </li>
         </ul>
       </nav>
