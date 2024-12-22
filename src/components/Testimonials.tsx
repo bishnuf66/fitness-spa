@@ -17,7 +17,6 @@ function Testimonials() {
           absolutely love it! The trainers are so motivated and they really help
           me reach my fitness goals.
         </p>
-        {/* Customer Profile Section */}
         <div className="flex justify-center md:justify-start items-center space-x-2">
           <span className="rounded-full w-10 h-10 overflow-hidden">
             <Image
@@ -67,7 +66,6 @@ function Testimonials() {
 
       {/* Right Section: Individual Testimonial */}
       <div className="w-full md:w-2/5 relative secondary-bg rounded-2xl flex flex-col space-y-6 p-6">
-        {/* Customer Info */}
         <div className="flex flex-row w-full justify-center md:justify-start items-center">
           <div className="rounded-full w-20 h-20">
             <Image

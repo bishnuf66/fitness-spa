@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'md-custom': '1000px', // Custom breakpoint at 1000px
+      },
       backgroundImage:{
       },
       colors: {
