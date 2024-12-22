@@ -1,4 +1,3 @@
-
 ## Getting Started
 
 Prerequisites
@@ -12,3 +11,5 @@ then start the development server using
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+main app fitness http://localhost:3000
+css challange http://localhost:3000/css-challange
