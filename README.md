@@ -1,3 +1,7 @@
+this app is deployed at
+
+https://fitness-m4e8two8v-bishnuf66s-projects.vercel.app/
+
 ## Getting Started
 
 Prerequisites

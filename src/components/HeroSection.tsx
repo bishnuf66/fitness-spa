@@ -12,7 +12,7 @@ function HeroSection() {
 
         <section className="w-full  space-y-5 items-center justify-center relative max-h-screen">
           <div className="flex flex-row flex-wrap items-center ">
-            <h1 className="">GET HEALTHY BODY WITH THE PERFECT EXERCISES</h1>
+            <h2 className="">GET HEALTHY BODY WITH THE PERFECT EXERCISES</h2>
             <div className="w-32 h-12 ml-4  flex">
               <Image
                 src="/treadmil.jpg"
