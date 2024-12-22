@@ -1,7 +1,8 @@
 import {
   Phone,
-  Mail,
+  Send,
   MapPin,
+  Mail,
   Facebook,
   Instagram,
   Twitter,
@@ -11,8 +12,8 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-bg text-white py-8 px-4 md:px-8">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
+    <footer className="primary-bg text-white px-4 py-6 sm:px-8 sm:py-10 md:px-12 md:py-14 lg:px-16 lg:py-16 xl:px-20 xl:py-24 m-0">
+      <div className=" mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
         <div>
           <h3 className="text-lg font-bold mb-4">Company</h3>
           <div className="space-y-2">
@@ -97,17 +98,17 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-bold mb-4">Subscribe Our Newsletter</h3>
           <form className="mb-4">
-            <div className="flex">
+            <div className="flex items-center relative">
               <input
                 type="email"
                 placeholder="Enter Your Email"
-                className="w-full px-3 py-2 text-indigo-900 bg-white rounded-l-md focus:outline-none"
+                className="w-full px-3 py-2 text-indigo-900 bg-white rounded-full focus:outline-none"
               />
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none"
+                className="bg-red-500 text-white   m-1 p-2  hover:bg-red-600 focus:outline-none absolute right-0 top-0 bottom-0 rounded-full flex items-center justify-center"
               >
-                <Mail className="h-5 w-5" />
+                <Send className="h-5 w-5" />
               </button>
             </div>
           </form>
@@ -119,22 +120,19 @@ export default function Footer() {
           <Dumbbell className=" text-red-500 " />
           FITNESXIA
         </span>
-        <p>
-          Copyright © 2024 EverestFitness. All rights reserved. Powered by MSP
-          Solution Pvt. Ltd.
-        </p>
+        <p>Copyright © 2024 Bishnu bk. All rights reserved.</p>
         <div className=" flex flex-row space-x-2">
-          <a href="#" className="text-white hover:text-pink-400">
+          <a href="#" className="text-white hover:text-red-400">
             <Instagram className="h-6 w-6" />
           </a>
 
-          <a href="#" className="text-white hover:text-blue-400">
+          <a href="#" className="text-white hover:text-red-400">
             <Facebook className="h-6 w-6" />
           </a>
-          <a href="#" className="text-white hover:text-blue-400">
+          <a href="#" className="text-white hover:text-red-400">
             <Linkedin className="h-6 w-6" />
           </a>
-          <a href="#" className="text-white hover:text-blue-400">
+          <a href="#" className="text-white hover:text-red-400">
             <Twitter className="h-6 w-6" />
           </a>
         </div>

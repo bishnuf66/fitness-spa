@@ -9,6 +9,10 @@ import WhyUs from "@/components/WhyUs";
 export default function Home() {
   return (
     <div className="  font-[family-name:var(--font-geist-sans)]">
+      <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+      />
       <HeroSection />
       <AboutUs />
       <Program />

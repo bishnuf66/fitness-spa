@@ -11,12 +11,25 @@
     @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold;
   }
 
+  section {
+    @apply px-4 py-6 sm:px-8 sm:py-10 md:px-12 md:py-14 lg:px-16 lg:py-16 xl:px-20 xl:py-24 m-0;
+  }
+
   h2 {
     @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold;
   }
 
   h3 {
-    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-medium;
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-medium;
+  }
+
+  .primary-bg {
+    @apply bg-gradient-to-b from-stone-900 to-zinc-800;
+  }
+
+  /* Secondary background color */
+  .secondary-bg {
+    @apply bg-stone-700;
   }
 }
 
@@ -43,8 +56,8 @@ body {
 }
 
 .hero-section {
-  background-image: url("/woman-holding-weights.jpg"); /* Replace with the actual path to your image */
-  background-size: cover; /* Ensures the image covers the entire container */
+  background-image: url("/strong-man.jpg"); /* Replace with the actual path to your image */
+  background-size: cover; /* Stretch the image to fill the entire container */
   background-position: center; /* Centers the image */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   height: 100vh; /* Optional: Adjusts the height to the full viewport */
