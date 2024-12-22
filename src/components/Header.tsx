@@ -8,7 +8,7 @@ function Header() {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
-    <header className="w-full flex flex-row justify-between items-center px-4 py-6">
+    <header className="w-full flex flex-row justify-between items-center px-4 ">
       <div className="flex flex-row items-center space-x-2">
         <Dumbbell
           className="h-10 w-10 text-red-500"

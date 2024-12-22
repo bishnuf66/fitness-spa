@@ -6,10 +6,11 @@ import Image from "next/image";
 
 function HeroSection() {
   return (
-    <div className="hero-section h-full w-full ">
+    <div className="hero-section  h-full w-full ">
       <section>
         <Header />
-        <section className="w-1/2  space-y-10 items-center justify-center relative">
+
+        <section className="w-full  space-y-5 items-center justify-center relative max-h-screen">
           <div className="flex flex-row flex-wrap items-center ">
             <h1 className="">GET HEALTHY BODY WITH THE PERFECT EXERCISES</h1>
             <div className="w-32 h-12 ml-4  flex">
