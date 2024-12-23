@@ -28,6 +28,12 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary",
+    title: "Fitness Spa",
+    description: "Achieve your fitness goals with our  workout plan.",
+    images: ["http://localhost:300/twitter-image.jpg"],
+  },
 
   alternates: {
     canonical: "https://localhost:3000",
