@@ -1,10 +1,12 @@
 this app is deployed at
 
-https://fitness-m4e8two8v-bishnuf66s-projects.vercel.app/
+main app https://fitness-m4e8two8v-bishnuf66s-projects.vercel.app/
+css challange https://fitness-m4e8two8v-bishnuf66s-projects.vercel.app/css-challange
 
 ## Getting Started
 
 Prerequisites
+
 Nodejs and npm
 
 clone the project and run install the dependency using "npm install"
