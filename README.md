@@ -1,22 +1,45 @@
-## Live Demo
+# Fitnesxia - Modern Fitness & Wellness SPA
 
-main app: https://fitness-spa-khaki.vercel.app/
-css challange: https://fitness-spa-khaki.vercel.app//css-challange
+![Fitnesxia Banner](public/logos/man.png)
 
-## Getting Started
+A modern, responsive Single Page Application (SPA) for a fitness and wellness center, built with Next.js, TypeScript, and Tailwind CSS.
 
-Prerequisites
+## 🚀 Features
 
-Nodejs and npm
+- **User Authentication** - Secure signup, login, and profile management
+- **Subscription Plans** - Monthly/Yearly membership options with Stripe integration
+- **Responsive Design** - Fully responsive layout that works on all devices
+- **Modern UI/UX** - Clean, intuitive interface with smooth animations
+- **Profile Management** - View and manage your subscription details
 
-clone the project cd to fitness-spa and install the dependency using "npm install"
+## 🛠️ Tech Stack
 
-then start the development server using
+- **Frontend**: Next.js 14, React 19, TypeScript
+- **Styling**: Tailwind CSS
+- **Authentication**: JWT, Protected Routes
+- **Payments**: Stripe Integration
+- **State Management**: React Context API
+- **Icons**: Lucide Icons
+- **Form Handling**: React Hook Form
+- **Notifications**: React Hot Toast
 
-"npm run dev"
+## 🚀 Getting Started
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Prerequisites
 
-main app fitness: http://localhost:3000
+- Node.js 18+
+- npm or pnpm
+- Stripe account (for payment processing)
 
-css challange: http://localhost:3000/css-challange
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/yourusername/fitnesxia.git](https://github.com/yourusername/fitnesxia.git)
+   cd fitnesxia
+   ```
+   pnpm install
+
+# Update the environment variables in .env
+
+pnpm dev
