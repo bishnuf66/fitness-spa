@@ -58,7 +58,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto pt-16">
+    <div className="w-full md:min-h-screen max-w-5xl mx-auto pt-16 md:mt-24">
       <div className="bg-gray-900 border border-gray-800 md:rounded-xl shadow-lg overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8">
