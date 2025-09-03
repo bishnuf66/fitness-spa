@@ -12,14 +12,17 @@ import api from "@/lib/api";
 
 export interface User {
   _id: string;
-  id: string;
-  email: string;
   name: string;
+  email: string;
   phone: string;
-  subscriptionStatus: "active" | "inactive" | "cancelled";
+  subscriptionStatus: string;
+  isSubscribed: boolean;
+  planName?: string;
+  planAmount?: number;
+  planCurrency?: string;
+  planInterval?: string;
+  planPriceId?: string;
   createdAt: string;
-  updatedAt: string;
-  __v: number;
 }
 
 interface AuthContextType {
@@ -53,25 +56,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Only try if token exists
         if (typeof window !== "undefined" && localStorage.getItem("token")) {
           console.log("Checking auth status...");
-          const response = await api.get<{ success: boolean; data: User }>(
-            "/api/auth/me"
-          );
-          console.log("Auth check response:", response);
-
+          const response = await api.get("/api/auth/me");
           // The API interceptor already returns response.data, so response is the actual data
           if (
             response &&
             typeof response === "object" &&
             "success" in response
           ) {
-            if (response.success) {
+            console.log("Auth check response:", response);
+            if (response.data.success) {
               // The user data is in the response object directly, not in response.data
-              setUser(response as unknown as User);
+              setUser(response?.data as User);
               return;
             }
           }
 
-          console.log("No valid user session found");
           setUser(null);
           if (typeof window !== "undefined") {
             localStorage.removeItem("token");
@@ -97,9 +96,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       setError(null);
-
-      console.log("Attempting login with:", { email });
-
       // Login and get token with user data
       console.log("Sending login request...");
       const response = await api
