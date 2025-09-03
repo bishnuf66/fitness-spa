@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PlanCard from "./PlanCard";
 
 type PlanType = {
@@ -8,91 +8,76 @@ type PlanType = {
   duration: string;
   priceId?: string;
   features: string[];
+  interval?: string;
+  id?: string;
+  marketing_features?: string[];
 };
-
-// Define plans as objects
-const monthlyPlans: PlanType[] = [
-  {
-    name: "Basic Plan",
-    price: "$99",
-    duration: "Month",
-    priceId: "price_1S36hnJUzMk4Q3iI9tDnWPS8",
-    features: [
-      "5 classes per month",
-      "4 group classes monthly",
-      "Online class access",
-      "E-book fitness guide",
-    ],
-  },
-  {
-    name: "Standard Plan",
-    price: "$129",
-    duration: "Month",
-    priceId: "price_1S36iwJUzMk4Q3iISKHar9UQ",
-    features: [
-      "10 classes per month",
-      "8 group classes monthly",
-      "Online class access",
-      "Exclusive E-book fitness guide",
-    ],
-  },
-  {
-    name: "Premium Plan",
-    price: "$159",
-    priceId: "price_1S36jKJUzMk4Q3iICCiYzJjf",
-    duration: "Month",
-    features: [
-      "Unlimited classes per month",
-      "Unlimited group classes",
-      "Online and in-person access",
-      "Personalized fitness guide",
-    ],
-  },
-];
-
-const annualPlans: PlanType[] = [
-  {
-    name: "Basic Plan",
-    price: "$999",
-    duration: "Year",
-    features: [
-      "60 classes per year",
-      "48 group classes yearly",
-      "Online class access",
-      "E-book fitness guide",
-    ],
-  },
-  {
-    name: "Standard Plan",
-    price: "$1,299",
-    duration: "Year",
-    features: [
-      "120 classes per year",
-      "96 group classes yearly",
-      "Online class access",
-      "Exclusive E-book fitness guide",
-    ],
-  },
-  {
-    name: "Premium Plan",
-    price: "$1,599",
-    duration: "Year",
-
-    features: [
-      "Unlimited classes per year",
-      "Unlimited group classes",
-      "Online and in-person access",
-      "Personalized fitness guide",
-    ],
-  },
-];
 
 function Membership() {
   const [selectedPlan, setSelectedPlan] = useState<"monthly" | "annual">(
     "monthly"
   );
+  const [plans, setPlans] = useState<{
+    monthly: PlanType[];
+    annual: PlanType[];
+  }>({
+    monthly: [],
+    annual: [],
+  });
+  const [loading, setLoading] = useState(true);
 
-  const plansToRender = selectedPlan === "monthly" ? monthlyPlans : annualPlans;
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8000/api/subscriptions/products"
+        );
+        const data = await response.json();
+
+        if (data.success) {
+          // Transform API data to match your PlanType structure
+          const monthly: PlanType[] = [];
+          const annual: PlanType[] = [];
+
+          data.data.forEach((plan: any) => {
+            const formattedPlan = {
+              name: plan.name,
+              price: plan.price.toString(),
+              duration: plan.interval === "month" ? "Month" : "Year",
+              priceId: plan.id,
+              features: plan.marketing_features || [],
+              interval: plan.interval,
+            };
+
+            if (plan.interval === "month") {
+              monthly.push(formattedPlan);
+            } else if (plan.interval === "year") {
+              annual.push(formattedPlan);
+            }
+          });
+
+          setPlans({ monthly, annual });
+        }
+      } catch (error) {
+        console.error("Error fetching plans:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="primary-bg space-y-6 p-8" id="membership">
+        <div className="text-center">Loading plans...</div>
+      </section>
+    );
+  }
+
+  const plansToRender =
+    selectedPlan === "monthly" ? plans.monthly : plans.annual;
 
   return (
     <section className="primary-bg space-y-6 p-8" id="membership">
@@ -121,7 +106,7 @@ function Membership() {
       <div className="flex flex-wrap justify-center gap-8 mt-6">
         {plansToRender.map((plan) => (
           <PlanCard
-            key={plan.name}
+            key={plan.priceId || plan.name}
             name={plan.name}
             price={plan.price}
             duration={plan.duration}

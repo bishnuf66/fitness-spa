@@ -11,17 +11,22 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [visible, setVisible] = useState(true);
   const userMenuRef = useRef<HTMLLIElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
-  // Track active section based on scroll position
+  // Track active section and handle hide/show on scroll
   useEffect(() => {
     const sections = ['home', 'aboutus', 'program', 'membership', 'testimonials'];
     
     const handleScroll = () => {
-      const currentPosition = window.scrollY + 100; // Adding offset for fixed header
+      const currentScrollY = window.scrollY;
       
+      // Handle section highlighting
+      const currentPosition = currentScrollY + 100; // Offset for fixed header
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -32,17 +37,32 @@ function Header() {
           }
         }
       }
+      
+      // Handle show/hide header
+      if (currentScrollY > 100) { // Only start hiding after 100px scroll
+        if (currentScrollY > lastScrollY && currentScrollY - lastScrollY > 5) {
+          // Scrolling down
+          setVisible(false);
+        } else if (lastScrollY > currentScrollY && lastScrollY - currentScrollY > 5) {
+          // Scrolling up
+          setVisible(true);
+        }
+      } else {
+        setVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
 
     // Initial check
     handleScroll();
     
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll);
+    // Add scroll event listener with passive for better performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
   const toggleUserMenu = () => setIsUserMenuOpen((prev) => !prev);
 
   // Handle smooth scrolling to sections across pages
@@ -78,7 +98,12 @@ function Header() {
   }, []);
 
   return (
-    <header className="w-full flex flex-row justify-between items-center p-4  fixed top-0  ">
+    <header 
+      ref={headerRef}
+      className={`w-full flex flex-row justify-between items-center p-4 fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+        visible ? 'translate-y-0' : '-translate-y-full'
+      } bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg`}
+    >
       <div className="flex flex-row items-center space-x-2">
         <Dumbbell
           className="h-10 w-10 text-red-500"
