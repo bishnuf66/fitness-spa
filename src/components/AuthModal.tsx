@@ -25,8 +25,9 @@ export default function AuthModal({
     const email = String(form.get("email") || "").trim();
     const password = String(form.get("password") || "").trim();
 
-    if (!email || !password)
+    if (!email || !password) {
       return toast.error("Email and password are required");
+    }
 
     const t = toast.loading("Logging in...");
     try {
@@ -35,6 +36,7 @@ export default function AuthModal({
       onClose();
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Login failed", { id: t });
+      // Don't close the modal on error
     }
   };
 
@@ -46,16 +48,18 @@ export default function AuthModal({
     const phone = String(form.get("phone") || "").trim();
     const password = String(form.get("password") || "").trim();
 
-    if (!name || !email || !phone || !password)
+    if (!name || !email || !phone || !password) {
       return toast.error("All fields are required");
+    }
 
     const t = toast.loading("Creating your account...");
     try {
       await signup({ name, email, phone, password });
-      toast.success("Account created", { id: t });
-      onClose();
+      toast.success("Account created successfully. Please log in.", { id: t });
+      setTab("login"); // Switch to login tab after successful signup
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Signup failed", { id: t });
+      // Don't close the modal on error
     }
   };
 
@@ -66,7 +70,7 @@ export default function AuthModal({
       title={tab === "login" ? "Login" : "Create account"}
       size="sm"
     >
-      <div className="flex mb-6 border border-gray-800 rounded-lg overflow-hidden">
+      <div className="flex mb-6 border border-gray-800 rounded-lg overflow-hidden ">
         <button
           onClick={() => setTab("login")}
           className={`flex-1 py-2 text-sm font-medium ${

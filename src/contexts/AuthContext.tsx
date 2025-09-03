@@ -1,14 +1,25 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useRouter } from "next/navigation";
+import api from "@/lib/api";
 
-interface User {
+export interface User {
+  _id: string;
   id: string;
   email: string;
   name: string;
-  phone?: string;
+  phone: string;
+  subscriptionStatus: "active" | "inactive" | "cancelled";
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 interface AuthContextType {
@@ -39,9 +50,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const checkAuth = async () => {
       try {
         // Only try if token exists
-        if (typeof window !== 'undefined' && localStorage.getItem('token')) {
-          const me = (await api.get('/api/auth/me')) as { user: User };
-          setUser(me.user);
+        if (typeof window !== "undefined" && localStorage.getItem("token")) {
+          const { data } = await api.get<{ success: boolean; data: User }>(
+            "/api/auth/me"
+          );
+          if (data.success) {
+            setUser(data.data);
+          } else {
+            setUser(null);
+          }
         } else {
           setUser(null);
         }
@@ -58,16 +75,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       setError(null);
-      const res = (await api.post('/api/auth/login', { email, password })) as { token: string; user?: User };
-      if (typeof window !== 'undefined' && res?.token) {
-        localStorage.setItem('token', res.token);
+
+      console.log("Attempting login with:", { email });
+
+      // Login and get token with user data
+      const data: any = await api.post<{
+        success: boolean;
+        token: string;
+        user: User;
+      }>("/api/auth/login", { email, password });
+
+      console.log("Login response data:", data);
+
+      if (!data) {
+        throw new Error("No data in login response");
       }
-      // Always fetch fresh user profile
-      const me = (await api.get('/api/auth/me')) as { user: User };
-      setUser(me.user);
-      router.push('/profile');
+
+      if (!data?.token || !data?.user) {
+        console.error("Missing token or user in response:", {
+          token: data?.token,
+          user: data?.user,
+        });
+        throw new Error("Invalid login response");
+      }
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", data?.token);
+      }
+
+      // Set the user from the login response
+      setUser(user);
+      router.push("/profile");
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      console.error("Login error:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Login failed";
+      console.log("Error details:", {
+        status: err.response?.status,
+        data: err.response?.data,
+        message: errorMessage,
+      });
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
@@ -83,17 +131,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       setError(null);
-      // Register
-      await api.post('/api/auth/register', {
+
+      // Register user and get token with user data
+      const { data } = await api.post<{
+        success: boolean;
+        token: string;
+        user: User;
+      }>("/api/auth/register", {
         name: userData.name,
         email: userData.email,
         password: userData.password,
         phone: userData.phone,
       });
-      // Auto login
-      await login(userData.email, userData.password);
+
+      console.log("Signup response data:", data);
+
+      if (!data) {
+        throw new Error("No data in signup response");
+      }
+
+      const { token, user } = data;
+
+      if (!token || !user) {
+        console.error("Missing token or user in response:", { token, user });
+        throw new Error("Invalid signup response");
+      }
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", token);
+      }
+
+      // Set the user from the signup response
+      setUser(user);
+      router.push("/profile");
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Signup failed');
+      setError(err.response?.data?.message || "Signup failed");
       throw err;
     } finally {
       setLoading(false);
@@ -102,15 +174,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
       }
       // Optional: tell backend to clear server-side session if any
-      try { await api.post('/api/auth/logout'); } catch {}
+      try {
+        await api.post("/api/auth/logout");
+      } catch {}
       setUser(null);
-      router.push('/');
+      router.push("/");
     } catch (err) {
-      console.error('Logout failed:', err);
+      console.error("Logout failed:", err);
     }
   };
 
@@ -134,7 +208,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
