@@ -48,13 +48,13 @@ export const PlanCard: React.FC<PlanProps> = ({
   };
 
   return (
-    <div className="flex flex-col space-y-4 hover:bg-orange-500 hover:scale-105 p-6 w-64 rounded-lg secondary-bg group transition-all duration-300 ease-in-out">
-      <h3 className="text-lg font-semibold">{name}</h3>
-      <div className="text-xl font-bold">
+    <div className="flex flex-col  gap-6 hover:bg-orange-500 hover:scale-105 p-6 w-full rounded-lg secondary-bg group transition-all duration-300 ease-in-out text-center">
+      <h3 className="text-4xl font-semibold">{name}</h3>
+      <div className="text-6xl font-bold">
         <span>{price}</span>
-        <span className="text-sm">/{duration}</span>
+        <span className="text-lg">/{duration}</span>
       </div>
-      <ul className="space-y-2 text-gray-300 text-sm">
+      <ul className="space-y-4 text-gray-300 text-lg">
         {features.map((feature, index) => (
           <li key={index}>{feature}</li>
         ))}
