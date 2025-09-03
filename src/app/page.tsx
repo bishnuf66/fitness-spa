@@ -1,8 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import AboutUs from "@/components/AboutUs";
-import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Membership from "@/components/Membership";
 import Program from "@/components/Program";
