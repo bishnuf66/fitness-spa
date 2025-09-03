@@ -8,6 +8,12 @@ type PlanProps = {
   features: string[];
 };
 
+interface CheckoutResponse {
+  url: string;
+  success: boolean;
+  sessionId: string;
+}
+
 export const PlanCard: React.FC<PlanProps> = ({
   name,
   price,
@@ -20,13 +26,18 @@ export const PlanCard: React.FC<PlanProps> = ({
       toast.error("Price ID is missing. Please try again later.");
       return;
     }
-
     const toastId = toast.loading("Processing your request...");
-
     try {
-      const session = await api.post("/api/subscriptions", { priceId });
+      const response: CheckoutResponse = await api.post("/api/subscriptions", {
+        priceId,
+      });
+      console.log(response);
+      if (!response?.url) {
+        toast.error("Failed to create checkout session.", { id: toastId });
+        return;
+      }
       toast.success("Redirecting to checkout...", { id: toastId });
-      window.location.href = session?.data?.url;
+      window.location.href = response?.url;
     } catch (error: any) {
       console.error("Error creating checkout session:", error);
       const errorMessage =
