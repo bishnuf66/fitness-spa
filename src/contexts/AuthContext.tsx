@@ -28,7 +28,12 @@ interface User {
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<any>;
-  signup: (name: string, email: string, password: string) => Promise<any>;
+  signup: (
+    name: string,
+    email: string,
+    password: string,
+    phone: string
+  ) => Promise<any>;
   logout: () => void;
   isAuthenticated: boolean;
   loading: boolean;
@@ -92,7 +97,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const signup = async (name: string, email: string, password: string) => {
+  const signup = async (
+    name: string,
+    email: string,
+    password: string,
+    phone: string
+  ) => {
     try {
       setLoading(true);
       setError(null);
@@ -100,6 +110,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         name,
         email,
         password,
+        phone,
       });
       return response.data;
     } catch (error: any) {

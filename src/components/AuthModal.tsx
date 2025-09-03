@@ -54,7 +54,7 @@ export default function AuthModal({
 
     const t = toast.loading("Creating your account...");
     try {
-      await signup({ name, email, phone, password });
+      await signup(name, email, phone, password);
       toast.success("Account created successfully. Please log in.", { id: t });
       setTab("login"); // Switch to login tab after successful signup
     } catch (err: any) {
