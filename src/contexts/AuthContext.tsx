@@ -49,21 +49,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        setLoading(true);
         // Only try if token exists
         if (typeof window !== "undefined" && localStorage.getItem("token")) {
-          const { data } = await api.get<{ success: boolean; data: User }>(
+          console.log("Checking auth status...");
+          const response = await api.get<{ success: boolean; data: User }>(
             "/api/auth/me"
           );
-          if (data.success) {
-            setUser(data.data);
-          } else {
-            setUser(null);
+          console.log("Auth check response:", response);
+
+          // The API interceptor already returns response.data, so response is the actual data
+          if (
+            response &&
+            typeof response === "object" &&
+            "success" in response
+          ) {
+            if (response.success) {
+              // The user data is in the response object directly, not in response.data
+              setUser(response as unknown as User);
+              return;
+            }
+          }
+
+          console.log("No valid user session found");
+          setUser(null);
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("token");
           }
         } else {
+          console.log("No token found in localStorage");
           setUser(null);
         }
       } catch (err) {
+        console.error("Error checking auth status:", err);
         setUser(null);
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+        }
       } finally {
         setLoading(false);
       }
@@ -79,31 +101,45 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("Attempting login with:", { email });
 
       // Login and get token with user data
-      const data: any = await api.post<{
-        success: boolean;
-        token: string;
-        user: User;
-      }>("/api/auth/login", { email, password });
+      console.log("Sending login request...");
+      const response = await api
+        .post<{
+          success: boolean;
+          token: string;
+          user: User;
+        }>("/api/auth/login", { email, password })
+        .then((res) => {
+          console.log("Login response:", res);
+          return res;
+        })
+        .catch((error) => {
+          console.error("Login request failed:", error);
+          console.error("Error response:", error.response);
+          throw error;
+        });
 
-      console.log("Login response data:", data);
+      console.log("Login response data:", response);
 
-      if (!data) {
-        throw new Error("No data in login response");
+      if (!response) {
+        console.error("No response from login API");
+        throw new Error("No response from server");
       }
 
-      if (!data?.token || !data?.user) {
-        console.error("Missing token or user in response:", {
-          token: data?.token,
-          user: data?.user,
-        });
+      // Since our API interceptor already returns response.data,
+      // we can directly destructure the properties
+      const { token, user } = response as any; // Temporary any type to bypass TypeScript error
+
+      if (!token || !user) {
+        console.error("Missing token or user in response:", { token, user });
         throw new Error("Invalid login response");
       }
 
+      // Store the token in localStorage
       if (typeof window !== "undefined") {
-        localStorage.setItem("token", data?.token);
+        localStorage.setItem("token", token);
       }
 
-      // Set the user from the login response
+      // Update the user state and redirect
       setUser(user);
       router.push("/profile");
     } catch (err: any) {
@@ -132,8 +168,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       setError(null);
 
+      console.log("Attempting signup with:", { email: userData.email });
+
       // Register user and get token with user data
-      const { data } = await api.post<{
+      const response = await api.post<{
         success: boolean;
         token: string;
         user: User;
@@ -144,13 +182,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         phone: userData.phone,
       });
 
-      console.log("Signup response data:", data);
+      console.log("Signup response:", response);
 
-      if (!data) {
-        throw new Error("No data in signup response");
+      if (!response) {
+        console.error("No response from signup API");
+        throw new Error("No response from server");
       }
 
-      const { token, user } = data;
+      // Since our API interceptor already returns response.data,
+      // we can directly destructure the properties
+      const { token, user } = response as any; // Temporary any type to bypass TypeScript error
 
       if (!token || !user) {
         console.error("Missing token or user in response:", { token, user });

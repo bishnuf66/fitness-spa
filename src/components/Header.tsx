@@ -1,15 +1,81 @@
 "use client";
-import React, { useState } from "react";
-import { Dumbbell } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Dumbbell, User, LogOut, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthModal from "./AuthModal";
+import Link from "next/link";
 
 function Header() {
   const { user, logout, isAuthenticated, loading } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const userMenuRef = useRef<HTMLLIElement>(null);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  // Track active section based on scroll position
+  useEffect(() => {
+    const sections = ['home', 'aboutus', 'program', 'membership', 'testimonials'];
+    
+    const handleScroll = () => {
+      const currentPosition = window.scrollY + 100; // Adding offset for fixed header
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (currentPosition >= offsetTop && currentPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    // Initial check
+    handleScroll();
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  const toggleUserMenu = () => setIsUserMenuOpen((prev) => !prev);
+
+  // Handle smooth scrolling to sections across pages
+  const scrollToSection = (sectionId: string) => {
+    // If we're already on the home page, just scroll to the section
+    if (window.location.pathname === '/') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      setIsMenuOpen(false);
+    } else {
+      // If we're on a different page, navigate to home with hash
+      window.location.href = `/#${sectionId}`;
+    }
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="w-full flex flex-row justify-between items-center p-4  fixed top-0  ">
@@ -26,44 +92,97 @@ function Header() {
       <nav>
         <ul className="hidden md:flex flex-row space-x-6 justify-center items-center">
           <li>
-            <a href="#home" className="hover:text-red-500 transition-colors">
+            <button
+              onClick={() => scrollToSection("home")}
+              className={`transition-colors ${
+                activeSection === 'home' ? 'text-red-500 font-medium' : 'hover:text-red-500'
+              }`}
+            >
               Home
-            </a>
-          </li>
-          <li>
-            <a href="#aboutus" className="hover:text-red-500 transition-colors">
-              About Us
-            </a>
-          </li>
-          <li>
-            <a href="#program" className="hover:text-red-500 transition-colors">
-              Program
-            </a>
-          </li>
-          <li>
-            <a
-              href="#membership"
-              className="hover:text-red-500 transition-colors"
-            >
-              Membership
-            </a>
-          </li>
-          <li>
-            <a
-              href="#testimonials"
-              className="hover:text-red-500 transition-colors"
-            >
-              Testimonials
-            </a>
+            </button>
           </li>
           <li>
             <button
-              className="primary-btn px-4 py-2"
-              onClick={() => setAuthOpen(true)}
+              onClick={() => scrollToSection("aboutus")}
+              className={`transition-colors ${
+                activeSection === 'aboutus' ? 'text-red-500 font-medium' : 'hover:text-red-500'
+              }`}
             >
-              Sign up
+              About Us
             </button>
           </li>
+          <li>
+            <button
+              onClick={() => scrollToSection("program")}
+              className={`transition-colors ${
+                activeSection === 'program' ? 'text-red-500 font-medium' : 'hover:text-red-500'
+              }`}
+            >
+              Program
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => scrollToSection("membership")}
+              className={`transition-colors ${
+                activeSection === 'membership' ? 'text-red-500 font-medium' : 'hover:text-red-500'
+              }`}
+            >
+              Membership
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => scrollToSection("testimonials")}
+              className={`transition-colors ${
+                activeSection === 'testimonials' ? 'text-red-500 font-medium' : 'hover:text-red-500'
+              }`}
+            >
+              Testimonials
+            </button>
+          </li>
+          {isAuthenticated ? (
+            <li className="relative" ref={userMenuRef}>
+              <button
+                onClick={toggleUserMenu}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+                aria-label="User menu"
+              >
+                <UserIcon className="w-5 h-5 text-gray-700" />
+              </button>
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                  <Link
+                    href="/profile"
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setIsUserMenuOpen(false)}
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsUserMenuOpen(false);
+                    }}
+                    className="flex w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </li>
+          ) : (
+            <li>
+              <button
+                className="primary-btn px-4 py-2"
+                onClick={() => setAuthOpen(true)}
+              >
+                Sign In
+              </button>
+            </li>
+          )}
         </ul>
 
         {/* Mobile Menu Button */}
@@ -81,50 +200,87 @@ function Header() {
         {isMenuOpen && (
           <ul className="absolute top-16 right-4  shadow-lg rounded-lg flex flex-col items-center space-y-4 py-4 px-6 md:hidden">
             <li>
-              <a href="#home" className="hover:text-red-500 transition-colors">
+              <button
+                onClick={() => scrollToSection("home")}
+                className="hover:text-red-500 transition-colors w-full text-left"
+              >
                 Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="#aboutus"
-                className="hover:text-red-500 transition-colors"
-              >
-                About Us
-              </a>
-            </li>
-            <li>
-              <a
-                href="#program"
-                className="hover:text-red-500 transition-colors"
-              >
-                Program
-              </a>
-            </li>
-            <li>
-              <a
-                href="#membership"
-                className="hover:text-red-500 transition-colors"
-              >
-                Membership
-              </a>
-            </li>
-            <li>
-              <a
-                href="#testimonials"
-                className="hover:text-red-500 transition-colors"
-              >
-                Testimonials
-              </a>
+              </button>
             </li>
             <li>
               <button
-                className="primary-btn px-4 py-2"
-                onClick={() => setAuthOpen(true)}
+                onClick={() => scrollToSection("aboutus")}
+                className="hover:text-red-500 transition-colors w-full text-left"
               >
-                Sign up
+                About Us
               </button>
             </li>
+            <li>
+              <button
+                onClick={() => scrollToSection("program")}
+                className="hover:text-red-500 transition-colors w-full text-left"
+              >
+                Program
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => scrollToSection("membership")}
+                className="hover:text-red-500 transition-colors w-full text-left"
+              >
+                Membership
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => scrollToSection("testimonials")}
+                className="hover:text-red-500 transition-colors w-full text-left"
+              >
+                Testimonials
+              </button>
+            </li>
+            {isAuthenticated ? (
+              <li className="relative" ref={userMenuRef}>
+                <button
+                  onClick={toggleUserMenu}
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
+                  aria-label="User menu"
+                >
+                  <UserIcon className="w-5 h-5 text-gray-700" />
+                </button>
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <Link
+                      href="/profile"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <User className="w-4 h-4 mr-2" />
+                      Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="flex w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </li>
+            ) : (
+              <li>
+                <button
+                  className="primary-btn px-4 py-2"
+                  onClick={() => setAuthOpen(true)}
+                >
+                  Sign In
+                </button>
+              </li>
+            )}
           </ul>
         )}
       </nav>

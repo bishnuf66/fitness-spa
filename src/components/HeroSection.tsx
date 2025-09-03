@@ -5,7 +5,10 @@ import Image from "next/image";
 
 function HeroSection() {
   return (
-    <div className="hero-section  h-full w-full justify-center items-center flex ">
+    <div
+      id="home"
+      className="hero-section h-full w-full justify-center items-center flex z-50"
+    >
       <section className="w-full  space-y-5 items-center justify-center relative max-h-screen">
         <div className="flex flex-row flex-wrap items-center ">
           <h2 className="">GET HEALTHY BODY WITH THE PERFECT EXERCISES</h2>
