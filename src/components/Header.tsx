@@ -1,8 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { Dumbbell } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import AuthModal from "./AuthModal";
 
 function Header() {
+  const { user, logout, isAuthenticated, loading } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -53,7 +57,12 @@ function Header() {
             </a>
           </li>
           <li>
-            <button className="primary-btn px-4 py-2">Sign up</button>
+            <button
+              className="primary-btn px-4 py-2"
+              onClick={() => setAuthOpen(true)}
+            >
+              Sign up
+            </button>
           </li>
         </ul>
 
@@ -109,11 +118,19 @@ function Header() {
               </a>
             </li>
             <li>
-              <button className="primary-btn px-4 py-2">Sign up</button>
+              <button
+                className="primary-btn px-4 py-2"
+                onClick={() => setAuthOpen(true)}
+              >
+                Sign up
+              </button>
             </li>
           </ul>
         )}
       </nav>
+      {authOpen && (
+        <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+      )}
     </header>
   );
 }
