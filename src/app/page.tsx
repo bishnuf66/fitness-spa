@@ -22,7 +22,6 @@ export default function Home() {
       <WhyUs />
       <Membership />
       <Testimonials />
-      <Footer />
     </div>
   );
 }

@@ -12,7 +12,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="primary-bg text-white px-4 py-6 sm:px-8 sm:py-10 md:px-12 md:py-14 lg:px-16 lg:py-16 xl:px-20 xl:py-24 m-0">
+    <footer className="primary-bg text-white p-10">
       <div className=" mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
         <div>
           <h3 className="text-lg font-bold mb-4">Company</h3>
